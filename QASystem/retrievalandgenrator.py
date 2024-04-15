@@ -5,6 +5,7 @@ from haystack_integrations.components.retrievers.pinecone import PineconeEmbeddi
 from haystack.components.generators import HuggingFaceTGIGenerator
 from haystack import Pipeline
 from QASystem.ingestion import ingest
+from QASystem.utility import pinecone_config
 import os
 from dotenv import load_dotenv
 
@@ -22,7 +23,7 @@ def get_result(query):
     query_pipeline = Pipeline()
 
     query_pipeline.add_component("text_embedder", SentenceTransformersTextEmbedder())
-    query_pipeline.add_component("retriever", PineconeEmbeddingRetriever(document_store=ingest()))
+    query_pipeline.add_component("retriever", PineconeEmbeddingRetriever(document_store=pinecone_config()))
     query_pipeline.add_component("prompt_builder", PromptBuilder(template=prompt_template))
     query_pipeline.add_component("llm", HuggingFaceTGIGenerator(model="mistralai/Mistral-7B-v0.1", token=Secret.from_token("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")))
 
@@ -43,11 +44,11 @@ def get_result(query):
 
 if __name__ == '__main__':
     #loading the environment variable
-    load_dotenv()
+    '''load_dotenv()
     PINECONE_API_KEY = os.getenv("PINECONE_API_KEY")
     os.environ['PINECONE_API_KEY'] = PINECONE_API_KEY
     
-    print("Import Successfully")
+    print("Import Successfully")'''
     
     result=get_result("what is rag?")
     print(result)

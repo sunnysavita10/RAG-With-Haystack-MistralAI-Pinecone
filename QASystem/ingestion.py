@@ -8,16 +8,18 @@ from haystack.components.converters import PyPDFToDocument
 from pathlib import Path # type: ignore
 import os
 from dotenv import load_dotenv
+from QASystem.utility import pinecone_config
 
-def ingest():
+def ingest(document_store):
 
 	#configuring pinecone database
-	document_store = PineconeDocumentStore(
+	'''document_store = PineconeDocumentStore(
 		environment="gcp-starter",
 		index="default",
 		namespace="default",
 		dimension=768
 	)
+	'''
 
 	#creating a pipeline object
 	indexing = Pipeline()
@@ -36,14 +38,14 @@ def ingest():
 	#stroing the data as a embedding in the database
 	indexing.run({"converter": {"sources": [Path("C:\\Users\\sunny\\haystak-end-to-end\\data\\Retrieval-Augmented-Generation-for-NLP.pdf")]}})
  
-	return document_store
  
 if __name__ == "__main__":
     #loading the environment variable
-    load_dotenv()
+    '''load_dotenv()
     PINECONE_API_KEY = os.getenv("PINECONE_API_KEY")
     os.environ['PINECONE_API_KEY'] = PINECONE_API_KEY
     
-    print("Import Successfully")
+    print("Import Successfully")'''
+    document_store=pinecone_config()
     
-    document_store=ingest()
+    ingest(document_store)
