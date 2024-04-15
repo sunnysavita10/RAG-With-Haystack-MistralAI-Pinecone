@@ -1,0 +1,4 @@
+venv
+env
+.env
+QAsystem_with_haystack.egg-info
