@@ -9,6 +9,10 @@ from QASystem.utility import pinecone_config
 import os
 from dotenv import load_dotenv
 
+load_dotenv()
+HF_TOKEN = os.environ.get('HF_TOKEN')
+os.environ['HF_TOKEN'] = HF_TOKEN
+
 prompt_template = """Answer the following query based on the provided context. If the context does
                      not include an answer, reply with 'I don't know'.\n
                      Query: {{query}}
@@ -25,7 +29,7 @@ def get_result(query):
     query_pipeline.add_component("text_embedder", SentenceTransformersTextEmbedder())
     query_pipeline.add_component("retriever", PineconeEmbeddingRetriever(document_store=pinecone_config()))
     query_pipeline.add_component("prompt_builder", PromptBuilder(template=prompt_template))
-    query_pipeline.add_component("llm", HuggingFaceTGIGenerator(model="mistralai/Mistral-7B-v0.1", token=Secret.from_token("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")))
+    query_pipeline.add_component("llm", HuggingFaceTGIGenerator(model="mistralai/Mistral-7B-v0.1", token=Secret.from_token(os.environ['HF_TOKEN'])))
 
     query_pipeline.connect("text_embedder.embedding", "retriever.query_embedding")
     query_pipeline.connect("retriever.documents", "prompt_builder.documents")
