@@ -3,56 +3,73 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title style="color:black;">RAG With Haystack Mistral & Pinecone</title>
+    <title>RAG With Haystack Mistral & Pinecone</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&display=swap');
         body {
-            font-family: Arial, sans-serif; /* Changed font family */
-            background-color: #816060; /* Changed background color */
+            font-family: 'Fira Code', monospace;
+            background-color: #f0f2f5;
+            color: #333;
         }
 
         .header {
-            background-color: transparent;
+            background-color: #041e42;
             color: #ffffff;
-            padding: 15px;
+            padding: 20px;
             text-align: center;
-            border-bottom: 1px #353535 solid;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
+
         .header h1 {
             margin: 0;
-            font-size: 28px;
-            font-weight: 600;
+            font-size: 32px;
+            font-weight: 700;
         }
+
         .container {
-            padding: 15px;
-            padding-top: 10%;
-            border-right: 1px #353535 solid;
-            border-left: 1px #353535 solid;
-            height: 100vh;
+            padding-top: 120px;
+            max-width: 800px;
+            margin: auto;
         }
+
+        .form-label {
+            color: #041e42;
+            font-weight: 700;
+        }
+
         textarea {
             font-size: 16px;
-            border: 1px solid #353535 !important;
+            border: 1px solid #ccc;
             border-radius: 5px;
             resize: none;
-            background-color: #282828 !important;
-            color:#ffffff !important;
-            font-weight: 600;
+            background-color: #fff;
+            color: #333;
+            font-weight: 400;
+            padding: 10px;
+            transition: border-color 0.3s ease-in-out;
         }
-        label {
-            color: #1FB8CD !important;
-            font-weight: 600;
+
+        textarea:focus {
+            border-color: #041e42;
+            box-shadow: 0 0 5px rgba(4, 30, 66, 0.5);
         }
 
         .btn-md {
-            font-weight: 600;
-            background-color: #041e42; /* Changed submit button color */
-            border-color: #041e42; /* Changed submit button border color */
+            font-weight: 700;
+            background-color: #041e42;
+            border-color: #041e42;
+            color: #ffffff;
+            transition: background-color 0.3s ease-in-out, border-color 0.3s ease-in-out;
+        }
+
+        .btn-md:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
         }
 
         #answer-div {
-            margin-top: 20px; /* Adjusted margin */
+            margin-top: 30px;
         }
 
         #answer {
@@ -61,28 +78,26 @@
     </style>
   </head>
   <body>
-    <section>
-        <div class="header fixed-top w-100">
-            <h1>RAG With Haystack Mistral & Pinecone</h1>
-        </div>
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-6 pe-4">
-                    <div class="mb-4">
-                        <label for="question" class="form-label h4 mb-3" style="color: #8793a4;">Write Your Query</label>
-                        <textarea class="form-control" id="question" rows="4"></textarea>
-                    </div>
-                    <div class="mb-5 text-end">
-                        <button type="button" class="btn btn-info btn-md" id="submit-btn">Submit</button>
-                    </div>
-                    <div id="answer-div">
-                        <label for="answer" class="form-label h4 mb-3">Answer</label>
-                        <textarea class="form-control" id="answer" rows="4" readonly></textarea>
-                    </div>
+    <header class="header fixed-top w-100">
+        <h1>RAG With Haystack Mistral & Pinecone</h1>
+    </header>
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="mb-4">
+                    <label for="question" class="form-label h4 mb-3">Write Your Query</label>
+                    <textarea class="form-control" id="question" rows="4"></textarea>
+                </div>
+                <div class="mb-5 text-end">
+                    <button type="button" class="btn btn-info btn-md" id="submit-btn">Submit</button>
+                </div>
+                <div id="answer-div">
+                    <label for="answer" class="form-label h4 mb-3">Answer</label>
+                    <textarea class="form-control" id="answer" rows="4" readonly></textarea>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -126,8 +141,8 @@
                       Swal.fire({
                           icon: 'error',
                           title: 'Oops!!!',
-                          text: "Sorry, Couldn't be able to generate your response now. Please try after some time.",
-                          confirmButtonColor: "#040b14"
+                          text: "Sorry, couldn't generate your response now. Please try again later.",
+                          confirmButtonColor: "#041e42"
                       });
                   })
                   .finally(() => {
